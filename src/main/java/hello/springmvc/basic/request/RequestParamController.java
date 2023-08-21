@@ -1,11 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,6 +73,39 @@ public class RequestParamController {
     @RequestMapping("/request-param-map")
     public String requestParamMap(@RequestParam Map<String, Object> paramMap){
         log.info("username={}, age={}", paramMap.get("username"), paramMap.get("age"));
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@RequestParam String username, @RequestParam int age){
+        HelloData helloData = new HelloData();
+        helloData.setUsername(username);
+        helloData.setAge(age);
+
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("hellodata={}", helloData); // 롬복덕에 자동으로 toString() 적용됨
+
+        return "ok";
+    }
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1.5")
+    public String modelAttributeV1Re(@ModelAttribute HelloData helloData){
+
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("hellodata={}", helloData); // 롬복덕에 자동으로 toString() 적용됨
+
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV1(HelloData helloData){
+        // 스프링은 @ 생략시 다음과 같음 int, String, Integer 같은 단순타입이 @RequestParam, 그 외 @ModelAttribute
+
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("hellodata={}", helloData); // 롬복덕에 자동으로 toString() 적용됨
+
         return "ok";
     }
 
